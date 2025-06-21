@@ -2,7 +2,7 @@
 
 import React from 'react'
 
-export const PropertiesSearch: React.FC<{
+export const PropertiesSearchHeader: React.FC<{
   filters: {
     bedrooms: number
     development: string
@@ -11,103 +11,100 @@ export const PropertiesSearch: React.FC<{
     minPrice: number
     maxPrice: number
   }
-  setFilters: React.Dispatch<React.SetStateAction<typeof filters>>
+  setFilters: React.Dispatch<React.SetStateAction<any>>
 }> = ({ filters, setFilters }) => {
   return (
-    <div className="pt-1 pb-1 bg-[#FEFEFF] text-black">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="bg-white shadow-md rounded-lg p-6 flex flex-wrap gap-4 justify-between">
-          {/** Development */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700">Development</label>
-            <select className="mt-1 block w-40 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm">
-              <option>Developments</option>
-            </select>
-          </div>
+    <div className="w-screen flex justify-center px-4">
+      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-7xl">
+        <div className="flex flex-wrap justify-center gap-6">
+          {/* Common Fields */}
+          {[
+            {
+              label: 'Development',
+              value: filters.development,
+              onChange: (v: string) => setFilters((prev: any) => ({ ...prev, development: v })),
+              options: ['All Developments', 'Dev A', 'Dev B'],
+              key: 'development',
+            },
+            {
+              label: 'Type',
+              value: filters.type,
+              onChange: (v: string) => setFilters((prev: any) => ({ ...prev, type: v })),
+              options: ['All Types', 'House', 'Condo', 'Loft'],
+              key: 'type',
+            },
+            {
+              label: 'Location',
+              value: filters.location,
+              onChange: (v: string) => setFilters((prev: any) => ({ ...prev, location: v })),
+              options: ['All Locations', 'Bangkok', 'Pattaya'],
+              key: 'location',
+            },
+          ].map(({ label, value, onChange, options, key }) => (
+            <div key={key} className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">{label}</label>
+              <select
+                className="mt-1 w-44 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+              >
+                {options.map((opt, i) => (
+                  <option key={i} value={opt === options[0] ? '' : opt.toLowerCase()}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
 
-          {/** Looking For */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700">Looking For</label>
-            <select className="mt-1 block w-40 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm">
-              <option>Houses</option>
-            </select>
-          </div>
-
-          {/** Locations */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700">Locations</label>
-            <select className="mt-1 block w-40 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm">
-              <option>All Locations</option>
-            </select>
-          </div>
-
-          {/** Bedrooms */}
+          {/* Bedrooms */}
           <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700">Bedrooms</label>
             <select
-              className="mt-1 block w-40 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm"
+              className="mt-1 w-44 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
               value={filters.bedrooms}
               onChange={(e) =>
-                setFilters((prev) => ({ ...prev, bedrooms: Number(e.target.value) }))
+                setFilters((prev: any) => ({ ...prev, bedrooms: Number(e.target.value) }))
               }
             >
               <option value={0}>Any</option>
-              <option value={1}>1+</option>
-              <option value={2}>2+</option>
-              <option value={3}>3+</option>
-              <option value={4}>4+</option>
+              {[1, 2, 3, 4, 5].map((n) => (
+                <option key={n} value={n}>
+                  {n}+
+                </option>
+              ))}
             </select>
           </div>
 
-          {/** Min Budget */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700">Min Budget</label>
-            <select
-              className="mt-1 block w-40 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm"
-              value={filters.minPrice}
-              onChange={(e) =>
-                setFilters((prev: typeof filters) => ({
-                  ...prev,
-                  minPrice: Number(e.target.value),
-                }))
-              }
-            >
-              <option value={0}>No Min</option>
-              {[...Array(20)].map((_, i) => {
-                const value = (i + 1) * 50000
-                return (
-                  <option key={value} value={value}>
-                    ${value.toLocaleString()}
-                  </option>
-                )
-              })}
-            </select>
-          </div>
-
-          {/** Max Budget */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700">Max Budget</label>
-            <select
-              className="mt-1 block w-40 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm"
-              value={filters.maxPrice}
-              onChange={(e) =>
-                setFilters((prev: typeof filters) => ({
-                  ...prev,
-                  maxPrice: Number(e.target.value),
-                }))
-              }
-            >
-              <option value={0}>No Max</option>
-              {[...Array(20)].map((_, i) => {
-                const value = (i + 1) * 50000
-                return (
-                  <option key={value} value={value}>
-                    ${value.toLocaleString()}
-                  </option>
-                )
-              })}
-            </select>
-          </div>
+          {/* Price Range */}
+          {[
+            { label: 'Min Price', key: 'minPrice', value: filters.minPrice },
+            { label: 'Max Price', key: 'maxPrice', value: filters.maxPrice },
+          ].map(({ label, key, value }) => (
+            <div key={key} className="flex flex-col">
+              <label className="text-sm font-medium text-gray-700">{label}</label>
+              <select
+                className="mt-1 w-44 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                value={value}
+                onChange={(e) =>
+                  setFilters((prev: any) => ({
+                    ...prev,
+                    [key]: Number(e.target.value),
+                  }))
+                }
+              >
+                <option value={0}>{label === 'Min Price' ? 'No Min' : 'No Max'}</option>
+                {[...Array(20)].map((_, i) => {
+                  const val = (i + 1) * 50000
+                  return (
+                    <option key={val} value={val}>
+                      ${val.toLocaleString()}
+                    </option>
+                  )
+                })}
+              </select>
+            </div>
+          ))}
         </div>
       </div>
     </div>

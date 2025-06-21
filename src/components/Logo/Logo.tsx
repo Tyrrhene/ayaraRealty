@@ -6,5 +6,5 @@ interface Props {
 }
 
 export const Logo = ({ className }: Props) => {
-  return <span className={clsx('text-5xl font-bold text-white', className)}>Pattaya Pads</span>
+  return <span className={clsx('text-5xl font-bold text-[#ba954e]', className)}>Ayara Realty</span>
 }

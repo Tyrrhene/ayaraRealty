@@ -39,19 +39,19 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   return (
     <header
-      className="top-0 w-full px-0 z-20 bg-[#009DF3]"
+      className="top-0 w-full px-0 z-20 bg-[#081827]"
       {...(theme ? { 'data-theme': theme } : {})}
     >
-      <div className="flex items-center justify-between py-9 relative w-full z-20 px-12">
+      <div className="flex items-center justify-between text-[#ba954e]' py-9 relative w-full z-20 px-12">
         {/* Left nav, aligned to start */}
         <div className="flex-1 flex justify-start">
           <HeaderNav data={{ ...data, navItems: leftNavItems }} />
         </div>
         <Link href="/" className="absolute left-1/2 transform -translate-x-1/2">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+          <Logo />
         </Link>
         {/* Right nav, aligned to end */}
-        <div className="flex-1 flex justify-end mx-auto">
+        <div className="flex-1 flex justify-end text-[#ba954e]' mx-auto">
           <HeaderNav data={{ ...data, navItems: rightNavItems }} />
         </div>
       </div>

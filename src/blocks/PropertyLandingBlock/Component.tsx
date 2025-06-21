@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import type { Property } from '@/payload-types'
 import RichText from '@/components/RichText'
 import Link from 'next/link'
-import { PropertiesSearch } from '@/components/PropertiesSearch'
 
 const LIMIT = 6
 const DISPLAY_PAGE_RANGE = 5
