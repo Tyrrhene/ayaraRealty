@@ -14,7 +14,7 @@ export const PropertiesSearchHeader: React.FC<{
   setFilters: React.Dispatch<React.SetStateAction<any>>
 }> = ({ filters, setFilters }) => {
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 mx-auto">
+    <div className="bg-white shadow-lg rounded-lg p-4 mx-auto">
       <div className="flex flex-wrap justify-center gap-6">
         {/* Field Component */}
         {[

@@ -1,10 +1,14 @@
-import clsx from 'clsx'
-import React from 'react'
-
-interface Props {
-  className?: string
-}
-
-export const Logo = ({ className }: Props) => {
-  return <span className={clsx('text-5xl font-bold text-[#ba954e]', className)}>Ayara Realty</span>
+import Image from 'next/image'
+import ayara_logo_sideways from '../../../assets/ayara_logo_sideways.svg' // likely a URL
+//test deployment
+export const Logo = () => {
+  return (
+    <Image
+      src={ayara_logo_sideways}
+      alt="Ayara Realty Logo"
+      width={180} // or your actual width
+      height={180} // or your actual height
+      priority
+    />
+  )
 }

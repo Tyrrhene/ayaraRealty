@@ -14,7 +14,6 @@ interface HeaderClientProps {
 }
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-  /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
@@ -29,30 +28,22 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerTheme])
 
-  const leftNavItems = data?.navItems?.filter(
-    (item) => item.link.label !== 'CONTACT US' && item.link.label !== 'POSTS',
-  )
-
-  const rightNavItems = data?.navItems?.filter(
-    (item) => item.link.label === 'CONTACT US' || item.link.label === 'POSTS',
-  )
-
   return (
     <header
       className="top-0 w-full px-0 z-20 bg-[#081827]"
       {...(theme ? { 'data-theme': theme } : {})}
     >
-      <div className="flex items-center justify-between text-[#ba954e]' py-9 relative w-full z-20 px-12">
-        {/* Left nav, aligned to start */}
-        <div className="flex-1 flex justify-start">
-          <HeaderNav data={{ ...data, navItems: leftNavItems }} />
+      <div className="flex items-center justify-between text-[#ba954e] py-2 px-12 relative w-full z-20">
+        {/* Logo aligned to the left */}
+        <div className="flex items-center">
+          <Link href="/">
+            <Logo />
+          </Link>
         </div>
-        <Link href="/" className="absolute left-1/2 transform -translate-x-1/2">
-          <Logo />
-        </Link>
-        {/* Right nav, aligned to end */}
-        <div className="flex-1 flex justify-end text-[#ba954e]' mx-auto">
-          <HeaderNav data={{ ...data, navItems: rightNavItems }} />
+
+        {/* All nav items aligned to the right */}
+        <div className="flex items-center">
+          <HeaderNav data={{ ...data }} />
         </div>
       </div>
     </header>
