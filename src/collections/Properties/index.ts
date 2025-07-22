@@ -23,10 +23,14 @@ export const Properties: CollectionConfig = {
         {
           name: 'image',
           type: 'upload',
-          relationTo: 'media', // <-- this is key
+          relationTo: 'media', // 👈 tells Payload this links to S3-backed Media
           required: true,
         },
-      ],
+        {
+          name: 'alt',
+          type: 'text',
+        }
+      ]
     },
     {
       name: 'property_type',

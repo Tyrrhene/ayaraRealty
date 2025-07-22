@@ -27,7 +27,7 @@ export default function PageClient() {
     const query = new URLSearchParams({
       page: '1',
       limit: String(LIMIT),
-      depth: '2',
+      depth: '3',
     })
 
     if (filters.bedrooms > 0)
@@ -48,6 +48,8 @@ export default function PageClient() {
   useEffect(() => {
     fetchProperties()
   }, [filters])
+
+  console.log(properties)
 
   return (
     <div>
