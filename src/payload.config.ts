@@ -1,5 +1,6 @@
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { s3Storage } from '@payloadcms/storage-s3'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
@@ -58,6 +59,7 @@ export default buildConfig({
       ],
     },
   },
+  
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   db: mongooseAdapter({
@@ -68,7 +70,19 @@ export default buildConfig({
   globals: [Header, Footer],
   plugins: [
     ...plugins,
-    // storage-adapter-placeholder
+    s3Storage({
+      collections: {
+        media: true, // simple enablement, no special logic
+      },
+      bucket: process.env.S3_BUCKET || 'default-bucket-name',
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || 'default-bucket-name',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || 'default-bucket-name',
+        },
+        region: process.env.S3_REGION,
+      },
+    }),
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,

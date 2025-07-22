@@ -22,7 +22,8 @@ export const Properties: CollectionConfig = {
       fields: [
         {
           name: 'image',
-          type: 'text',
+          type: 'upload',
+          relationTo: 'media', // <-- this is key
           required: true,
         },
       ],
