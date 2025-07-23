@@ -45,14 +45,13 @@ export const PropertyBlock: React.FC<{
               href={`/properties/${property.id}`}
               className="w-full rounded overflow-hidden shadow-lg hover:shadow-xl bg-white transition transform hover:-translate-y-1 flex flex-col"
             >
-              {property.images?.[0]?.image &&
-                typeof property.images[0].image === 'object' &&
-                'url' in property.images[0].image && (
-                  <img
-                    className="w-full h-[40vh] object-cover"
-                    src={(property.images[0].image as { url: string }).url}
-                  />
-                )}
+              {property.images?.[0]?.image ? (
+                <img
+                  className="w-full h-[40vh] object-cover"
+                  src={(property.images[0].image.url}
+                />
+              ) : null}
+              
               <div className="flex-1 px-6 py-4 flex flex-col justify-between border border-gray-200">
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">{property.title}</h2>
