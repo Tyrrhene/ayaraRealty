@@ -3,18 +3,19 @@
 import React, { useState } from 'react'
 
 type ImageCarouselProps = {
-  images: string[]
+  images: { url: string }[]
 }
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
   const [current, setCurrent] = useState(0)
-
+  console.log(images)
+  console.log(current)
   return (
     <div className="flex flex-col md:flex-row gap-4">
       {/* Main Image */}
       <div className="flex-1">
         <img
-          src={images[current]}
+          src={images[current]?.url || ''}
           alt={`Image ${current + 1}`}
           className="rounded-lg w-full h-auto object-cover"
         />
@@ -33,7 +34,11 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
             }`}
             onClick={() => setCurrent(index)}
           >
-            <img src={img} alt={`Thumbnail ${index + 1}`} className="object-cover w-full h-full" />
+            <img
+              src={img.url}
+              alt={`Thumbnail ${index + 1}`}
+              className="object-cover w-full h-full"
+            />
           </button>
         ))}
       </div>
