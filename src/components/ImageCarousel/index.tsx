@@ -12,7 +12,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
 
   return (
     <div className="flex flex-col md:flex-row gap-4">
-      {/* Main Image */}
+      {/* Main Image test */}
       <div className="flex-1">
         <img
           src={images[current]}
