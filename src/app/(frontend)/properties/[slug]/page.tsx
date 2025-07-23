@@ -81,7 +81,7 @@ export default async function Post({ params: paramsPromise }: Args) {
         {/* Left side: Property content */}
         <div className="md:col-span-2 flex flex-col gap-6">
           {/* Property Image */}
-          <ImageCarousel images={post.images.map((imageObj) => imageObj.image.url)} />
+          <ImageCarousel images={post.images.map((imageObj) => imageObj.image)} />
 
           {/* Property Title */}
           <h1 className="text-3xl font-bold text-gray-900">{post.title}</h1>
