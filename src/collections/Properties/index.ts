@@ -17,13 +17,18 @@ export const Properties: CollectionConfig = {
       required: true,
     },
     {
+      name: 'description',   // 👈 Added field
+      type: 'textarea',
+      required: true,
+    },
+    {
       name: 'images',
       type: 'array',
       fields: [
         {
           name: 'image',
           type: 'upload',
-          relationTo: 'media', // 👈 tells Payload this links to S3-backed Media
+          relationTo: 'media',
           required: true,
         },
         {
