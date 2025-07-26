@@ -31,21 +31,25 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
 
       {/* Thumbnails */}
       <div className="flex md:flex-col gap-2 overflow-x-auto">
-        {images.map((img, index) => (
-          <button
-            key={index}
-            className={`border rounded overflow-hidden w-20 h-20 ${
-              current === index ? 'border-red-500' : 'border-gray-300'
-            }`}
-            onClick={() => setCurrent(index)}
-          >
-            <img
-              src={img.url}
-              alt={`Thumbnail ${index + 1}`}
-              className="object-cover w-full h-full"
-            />
-          </button>
-        ))}
+        {images.map((img, index) => {
+          console.log('Image object at index', index, img) // 👈 log it
+
+          return (
+            <button
+              key={index}
+              className={`border rounded overflow-hidden w-20 h-20 ${
+                current === index ? 'border-red-500' : 'border-gray-300'
+              }`}
+              onClick={() => setCurrent(index)}
+            >
+              <img
+                src={img.url}
+                alt={`Thumbnail ${index + 1}`}
+                className="object-cover w-full h-full"
+              />
+            </button>
+          )
+        })}
       </div>
     </div>
   )
