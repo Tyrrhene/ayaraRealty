@@ -1,6 +1,8 @@
 import type { Metadata } from 'next/types'
-import React from 'react'
-import PageClient from './page.client'
+import dynamicImport from 'next/dynamic'
+
+// Dynamically load client component with SSR disabled
+const PageClient = dynamicImport(() => import('./page.client'), { ssr: false })
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
