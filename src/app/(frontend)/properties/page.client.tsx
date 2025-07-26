@@ -20,7 +20,33 @@ export default function PageClient() {
     sortBy: 'default', // Added
   })
 
-  console.log('test log')
+  const fetchProperties = async () => {
+    const query = new URLSearchParams({
+      page: '1',
+      limit: String(LIMIT),
+      depth: '3',
+    })
+
+    if (filters.bedrooms > 0)
+      query.append('where[bedrooms][greater_than_equal]', String(filters.bedrooms))
+
+    if (filters.minPrice > 0)
+      query.append('where[price][greater_than_equal]', String(filters.minPrice))
+
+    if (filters.maxPrice > 0)
+      query.append('where[price][less_than_equal]', String(filters.maxPrice))
+
+    const res = await fetch(`/api/properties?${query.toString()}`)
+    const data = await res.json()
+
+    setProperties(data.docs || [])
+  }
+
+  console.log('properties for slug')
+
+  useEffect(() => {
+    fetchProperties()
+  }, [filters])
 
   console.log('properties for slug' + properties)
 
@@ -35,6 +61,10 @@ export default function PageClient() {
         sortBy={filters.sortBy}
         setSortBy={(value) => setFilters((prev) => ({ ...prev, sortBy: value }))}
       />
+
+      <div>
+        <PropertyBlock properties={properties} />
+      </div>
     </div>
   )
 }
