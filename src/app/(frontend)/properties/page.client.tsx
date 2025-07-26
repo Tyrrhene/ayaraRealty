@@ -42,8 +42,6 @@ export default function PageClient() {
     setProperties(data.docs || [])
   }
 
-  console.log('properties for slug')
-
   useEffect(() => {
     fetchProperties()
   }, [filters])
