@@ -74,7 +74,7 @@ export const PropertyLandingBlock: React.FC<{
               {property.images[0]?.image && (
                 <img
                   className="w-full h-48 object-cover"
-                  src={property.images[0].image}
+                  src={property.images[0].image.url}
                   alt={property.title}
                 />
               )}
