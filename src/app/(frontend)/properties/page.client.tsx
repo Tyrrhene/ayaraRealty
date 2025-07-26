@@ -21,27 +21,34 @@ export default function PageClient() {
   })
 
   const fetchProperties = async () => {
-    const query = new URLSearchParams({
-      page: '1',
-      limit: String(LIMIT),
-      depth: '3',
-    })
+    try {
+      const query = new URLSearchParams({
+        page: '1',
+        limit: String(LIMIT),
+        depth: '3',
+      })
 
-    if (filters.bedrooms > 0)
-      query.append('where[bedrooms][greater_than_equal]', String(filters.bedrooms))
+      if (filters.bedrooms > 0)
+        query.append('where[bedrooms][greater_than_equal]', String(filters.bedrooms))
 
-    if (filters.minPrice > 0)
-      query.append('where[price][greater_than_equal]', String(filters.minPrice))
+      if (filters.minPrice > 0)
+        query.append('where[price][greater_than_equal]', String(filters.minPrice))
 
-    if (filters.maxPrice > 0)
-      query.append('where[price][less_than_equal]', String(filters.maxPrice))
+      if (filters.maxPrice > 0)
+        query.append('where[price][less_than_equal]', String(filters.maxPrice))
 
-    const res = await fetch(`/api/properties?${query.toString()}`)
-    const data = await res.json()
+      const res = await fetch(`/api/properties?${query.toString()}`)
 
-    setProperties(data.docs || [])
+      if (!res.ok) {
+        throw new Error(`Fetch failed with status: ${res.status}`)
+      }
+
+      const data = await res.json()
+      setProperties(data.docs || [])
+    } catch (err) {
+      console.error('Error fetching properties:', err)
+    }
   }
-
   console.log('test log')
 
   useEffect(() => {
