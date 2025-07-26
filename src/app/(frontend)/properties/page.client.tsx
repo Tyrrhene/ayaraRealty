@@ -46,6 +46,8 @@ export default function PageClient() {
     fetchProperties()
   }, [filters])
 
+  console.log('properties for slug' + properties)
+
   return (
     <div>
       <PropertiesSearchHeader filters={filters} setFilters={setFilters} />
