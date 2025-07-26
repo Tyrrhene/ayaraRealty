@@ -18,6 +18,7 @@ export const PropertyBlock: React.FC<{
   const totalPages = Math.ceil(properties.length / ITEMS_PER_PAGE)
 
   const paginatedProperties = properties.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
+  console.log(paginatedProperties[0]?.images[0]?.image)
 
   const getPageNumbers = () => {
     const start = Math.max(1, page - Math.floor(DISPLAY_PAGE_RANGE / 2))
@@ -45,14 +46,7 @@ export const PropertyBlock: React.FC<{
               href={`/properties/${property.id}`}
               className="w-full rounded overflow-hidden shadow-lg hover:shadow-xl bg-white transition transform hover:-translate-y-1 flex flex-col"
             >
-              {/* {property.images?.[0]?.image &&
-                typeof property.images[0].image === 'object' &&
-                'url' in property.images[0].image && (
-                  <img
-                    className="w-full h-[40vh] object-cover"
-                    src={(property.images[0].image as { url: string }).url}
-                  />
-                )} */}
+              {<img className="w-full h-[40vh] object-cover" src={property?.images[0]?.image} />}
               <div className="flex-1 px-6 py-4 flex flex-col justify-between border border-gray-200">
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">{property.title}</h2>
