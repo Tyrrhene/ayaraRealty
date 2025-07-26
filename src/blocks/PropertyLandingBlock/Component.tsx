@@ -71,14 +71,10 @@ export const PropertyLandingBlock: React.FC<{
             className="max-w-sm rounded overflow-hidden shadow-lg hover:shadow-xl bg-white transition transform hover:-translate-y-1"
           >
             <div>
-              {property.images[0]?.image && (
-                <img
-                  className="w-full h-48 object-cover"
-                  src={property.images[0].image.url}
-                  alt={property.title}
-                />
-              )}
-
+              <img
+                className="w-full h-48 object-cover"
+                src={property.images?.[0]?.image?.url ?? '/placeholder.jpg'}
+              />
               <div className="px-6 py-4">
                 <div className="mb-2">
                   <h2 className="text-xl font-bold text-gray-900">{property.title}</h2>
