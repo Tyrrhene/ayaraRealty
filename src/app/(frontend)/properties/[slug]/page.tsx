@@ -72,7 +72,6 @@ export default async function Post({ params: paramsPromise }: Args) {
   })
 
   if (!post) return <PayloadRedirects url={url} />
-  console.log(post)
 
   return (
     <div className="container mx-auto px-4 py-10">

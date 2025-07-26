@@ -18,7 +18,6 @@ export const PropertyBlock: React.FC<{
   const totalPages = Math.ceil(properties.length / ITEMS_PER_PAGE)
 
   const paginatedProperties = properties.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
-  console.log(paginatedProperties[0]?.images[0]?.image)
 
   const getPageNumbers = () => {
     const start = Math.max(1, page - Math.floor(DISPLAY_PAGE_RANGE / 2))

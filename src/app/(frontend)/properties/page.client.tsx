@@ -20,9 +20,6 @@ export default function PageClient() {
     sortBy: 'default', // Added
   })
 
-  console.log(filters)
-  console.log(properties)
-
   const fetchProperties = async () => {
     const query = new URLSearchParams({
       page: '1',
@@ -48,8 +45,6 @@ export default function PageClient() {
   useEffect(() => {
     fetchProperties()
   }, [filters])
-
-  console.log(properties)
 
   return (
     <div>
