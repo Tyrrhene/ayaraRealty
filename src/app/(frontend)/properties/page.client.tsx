@@ -42,6 +42,8 @@ export default function PageClient() {
     setProperties(data.docs || [])
   }
 
+  console.log('test log')
+
   useEffect(() => {
     fetchProperties()
   }, [filters])
