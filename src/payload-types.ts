@@ -214,7 +214,12 @@ export interface Property {
   id: string;
   title: string;
   price: number;
-  images: { image: string }[]; // <-- each image is an object now
+  images: {
+    id: string;
+    image: {
+      url: string;
+    };
+  }[];
   property_type: string;
   status: 'For Sale' | 'For Rent' | 'Sold';
   bedrooms: number;
