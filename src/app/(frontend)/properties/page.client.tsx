@@ -1,13 +1,13 @@
 'use client'
-
+import { useHeaderTheme } from '@/providers/HeaderTheme'
 import React, { useEffect } from 'react'
 
-export default function PageClient() {
-  useEffect(() => {
-    console.log('✅ useEffect ran')
-  }, [])
+const PageClient: React.FC = () => {
+  /* Force the header to be dark mode while we have an image behind it */
+  const { setHeaderTheme } = useHeaderTheme()
 
-  console.log('✅ PageClient render')
-
-  return <div>Hello from PageClient</div>
+  useEffect(() => {}, [setHeaderTheme])
+  return <React.Fragment />
 }
+
+export default PageClient
