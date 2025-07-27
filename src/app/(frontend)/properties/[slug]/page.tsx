@@ -84,7 +84,7 @@ export default async function Post({ params: paramsPromise }: Args) {
               🛁 <span>{post.bathrooms} Baths</span>
             </div>
             <div className="flex items-center gap-2">
-              📐 <span>{post.area_sqft} sqft</span>
+              📐 <span>{post.area_square_meters} Square Meters</span>
             </div>
             <div className="flex items-center gap-2">
               🏷️ <span>{post.status}</span>

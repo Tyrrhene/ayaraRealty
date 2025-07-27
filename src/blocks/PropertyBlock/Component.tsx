@@ -81,7 +81,7 @@ export const PropertyBlock: React.FC<{
                     <div className="flex items-center">
                       <img src="https://img.icons8.com/ios-glyphs/24/null/expand--v1.png" />
                       <p className="ml-2 text-sm font-medium text-gray-700">
-                        {property.area_sqft} sqft
+                        {property.area_square_meters} sqft
                       </p>
                     </div>
                   </div>

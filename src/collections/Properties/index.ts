@@ -59,7 +59,7 @@ export const Properties: CollectionConfig = {
       required: true,
     },
     {
-      name: 'area_sqft',
+      name: 'area_square_meters',
       type: 'number',
       required: true,
     },

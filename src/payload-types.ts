@@ -224,7 +224,7 @@ export interface Property {
   status: 'For Sale' | 'For Rent' | 'Sold';
   bedrooms: number;
   bathrooms: number;
-  area_sqft: number;
+  area_square_meters: number;
   createdAt: string;
   updatedAt: string;
   _status?: 'draft' | 'published' | null;
