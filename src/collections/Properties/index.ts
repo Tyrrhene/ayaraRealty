@@ -5,6 +5,9 @@ export const Properties: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
   },
+  access: {
+    read: () => true, // ✅ Anyone can read without logging in
+  },
   fields: [
     {
       name: 'title',
@@ -17,7 +20,7 @@ export const Properties: CollectionConfig = {
       required: true,
     },
     {
-      name: 'description',   // 👈 Added field
+      name: 'description', // 👈 Added field
       type: 'textarea',
       required: true,
     },
@@ -34,8 +37,8 @@ export const Properties: CollectionConfig = {
         {
           name: 'alt',
           type: 'text',
-        }
-      ]
+        },
+      ],
     },
     {
       name: 'property_type',
