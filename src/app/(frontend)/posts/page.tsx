@@ -16,7 +16,7 @@ export default async function Page() {
 
   const posts = await payload.find({
     collection: 'posts',
-    depth: 1,
+    depth: 2,
     limit: 12,
     overrideAccess: false,
     select: {
@@ -27,11 +27,13 @@ export default async function Page() {
     },
   })
 
+  console.log('Posts:', posts)
+
   return (
     <div className="pt-24 pb-24">
       <PageClient />
       <div className="container mb-16">
-        <div className="prose  max-w-none">
+        <div className="prose max-w-none">
           <h1>Posts</h1>
         </div>
       </div>
