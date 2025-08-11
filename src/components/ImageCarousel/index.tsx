@@ -23,18 +23,20 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
           />
         )}
 
-        {/* Prev / Next */}
+        {/* Prev / Next - full height side overlays */}
         <button
           aria-label="Previous image"
           onClick={() => go(-1)}
-          className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-white px-3 py-2 hover:bg-black/60"
+          className="absolute left-0 top-0 h-full w-16 flex items-center justify-center 
+                     bg-black/20 hover:bg-black/30 text-white transition"
         >
           ‹
         </button>
         <button
           aria-label="Next image"
           onClick={() => go(1)}
-          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-white px-3 py-2 hover:bg-black/60"
+          className="absolute right-0 top-0 h-full w-16 flex items-center justify-center 
+                     bg-black/20 hover:bg-black/30 text-white transition"
         >
           ›
         </button>
