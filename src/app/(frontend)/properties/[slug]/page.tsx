@@ -137,9 +137,11 @@ export default async function Post({ params: paramsPromise }: Args) {
           {/* Call Agent Box */}
           <div className="mt-2 p-4 border rounded-lg shadow-md bg-white flex flex-col gap-2 text-center">
             <h3 className="text-lg font-semibold text-gray-800">Call Agent</h3>
-            <p className="text-sm text-gray-600">Get quick info about this property</p>
+            <p className="text-sm text-gray-600">
+              Contact our agent for quick info on this property
+            </p>
             <a
-              href="tel:+66123456789"
+              href="tel:+66968155224"
               className="bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-4 py-2 rounded transition"
             >
               📞 Call Now
