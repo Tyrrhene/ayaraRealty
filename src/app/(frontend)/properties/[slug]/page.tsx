@@ -154,7 +154,7 @@ export default async function Post({ params: paramsPromise }: Args) {
                 loading="lazy"
                 allowFullScreen
                 referrerPolicy="no-referrer-when-downgrade"
-                src={`${post.google_maps_location}&t=k&output=embed`}
+                src={`${post.google_maps_location?.trim() || 'https://www.google.com/maps?q=Pattaya,+Thailand'}&t=k&output=embed`}
               ></iframe>
             </div>
           }
