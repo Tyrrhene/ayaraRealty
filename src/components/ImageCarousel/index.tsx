@@ -2,54 +2,72 @@
 
 import React, { useState } from 'react'
 
-type ImageObject = {
-  url: string
-}
-
-type ImageCarouselProps = {
-  images: ImageObject[]
-}
+type ImageObject = { url: string }
+type ImageCarouselProps = { images: ImageObject[] }
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
   const [current, setCurrent] = useState(0)
 
+  const go = (dir: 1 | -1) => setCurrent((i) => (i + dir + images.length) % images.length)
+
   return (
     <div className="flex flex-col md:flex-row gap-4">
-      {/* Main Image */}
-      <div className="flex-1">
+      {/* Main image */}
+      <div className="relative flex-1">
         {images.length > 0 && (
           <img
             src={images[current]?.url}
             alt={`Image ${current + 1}`}
+            loading="lazy"
             className="rounded-lg w-full h-auto object-cover"
           />
         )}
+
+        {/* Prev / Next */}
+        <button
+          aria-label="Previous image"
+          onClick={() => go(-1)}
+          className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-white px-3 py-2 hover:bg-black/60"
+        >
+          ‹
+        </button>
+        <button
+          aria-label="Next image"
+          onClick={() => go(1)}
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 text-white px-3 py-2 hover:bg-black/60"
+        >
+          ›
+        </button>
+
         <div className="text-right text-xs text-gray-500 mt-2">
           {current + 1}/{images.length}
         </div>
       </div>
 
-      {/* Thumbnails */}
-      <div className="flex md:flex-col gap-2 overflow-x-auto">
-        {images.map((img, index) => {
-          console.log('Image object at index', index, img) // 👈 log it
-
-          return (
-            <button
-              key={index}
-              className={`border rounded overflow-hidden w-20 h-20 ${
-                current === index ? 'border-red-500' : 'border-gray-300'
-              }`}
-              onClick={() => setCurrent(index)}
-            >
-              <img
-                src={img.url}
-                alt={`Thumbnail ${index + 1}`}
-                className="object-cover w-full h-full"
-              />
-            </button>
-          )
-        })}
+      {/* Thumbnails rail (scrollable) */}
+      <div
+        className="
+          flex md:flex-col gap-2
+          overflow-x-auto md:overflow-x-hidden md:overflow-y-auto
+          md:max-h-[420px] md:pr-1
+        "
+        aria-label="Image thumbnails"
+      >
+        {images.map((img, index) => (
+          <button
+            key={index}
+            className={`border rounded overflow-hidden w-20 h-20 shrink-0 md:shrink
+              ${current === index ? 'border-red-500' : 'border-gray-300'}`}
+            onClick={() => setCurrent(index)}
+          >
+            <img
+              src={img.url}
+              alt={`Thumbnail ${index + 1}`}
+              loading="lazy"
+              className="object-cover w-full h-full"
+            />
+          </button>
+        ))}
       </div>
     </div>
   )
