@@ -1,0 +1,119 @@
+'use client'
+
+import React, { useState } from 'react'
+import type { Development } from '@/payload-types'
+import RichText from '@/components/RichText'
+import Link from 'next/link'
+
+const DISPLAY_PAGE_RANGE = 5
+const ITEMS_PER_PAGE = 9
+
+export const DevelopmentBlock: React.FC<{
+  id?: string
+  introContent?: any
+  developments: Development[]
+}> = ({ id, introContent, developments }) => {
+  const [page, setPage] = useState(1)
+
+  let totalPages: number = 0
+  let paginatedDevelopments: Development[] = []
+
+  if (developments && developments.length > 0) {
+    totalPages = Math.ceil(developments.length / ITEMS_PER_PAGE)
+    paginatedDevelopments = developments.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
+  }
+
+  const getPageNumbers = () => {
+    const start = Math.max(1, page - Math.floor(DISPLAY_PAGE_RANGE / 2))
+    const end = Math.min(totalPages, start + DISPLAY_PAGE_RANGE - 1)
+    const correctedStart = Math.max(1, end - DISPLAY_PAGE_RANGE + 1)
+
+    return Array.from({ length: end - correctedStart + 1 }, (_, i) => correctedStart + i)
+  }
+
+  return (
+    <div className="my-4" id={`block-${id}`}>
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        {introContent && (
+          <div className="mb-4 lg:mb-0">
+            <RichText className="ms-0 max-w-[48rem]" data={introContent} enableGutter={false} />
+          </div>
+        )}
+      </div>
+
+      <div className="px-[40px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[30px]">
+          {paginatedDevelopments.map((development) => (
+            <Link
+              key={development.id}
+              href={`/developments/${development.id}`}
+              className="w-full rounded overflow-hidden shadow-lg hover:shadow-xl bg-white transition transform hover:-translate-y-1 flex flex-col"
+            >
+              {
+                <img
+                  className="w-full h-[40vh] object-cover"
+                  src={development?.images[0]?.image?.url}
+                />
+              }
+              <div className="flex-1 px-6 py-4 flex flex-col justify-between border border-gray-200">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">{development.title}</h2>
+                  <div className="flex items-center flex-wrap gap-2 mt-2">
+                    <div className="rounded-full bg-blue-600 py-1 px-2 text-xs font-medium">
+                      {development.type || 'Type'}
+                    </div>
+                    <div className="rounded-full bg-yellow-500 py-1 px-2 text-xs font-medium">
+                      {development.status || 'Status'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-2">
+                  <div className="flex flex-wrap gap-x-6 gap-y-2">
+                    <div className="flex items-center">
+                      <img src="https://img.icons8.com/windows/24/null/bedroom.png" />
+                      <p className="ml-2 text-sm font-medium text-gray-700">
+                        Status {development.status}
+                      </p>
+                    </div>
+                    <div className="flex items-center">
+                      <img src="https://img.icons8.com/pastel-glyph/24/null/bath--v2.png" />
+                      <p className="ml-2 text-sm font-medium text-gray-700">
+                        type {development.type}
+                      </p>
+                    </div>
+                    <div className="flex items-center">
+                      <img src="https://img.icons8.com/pastel-glyph/24/null/bath--v2.png" />
+                      <p className="ml-2 text-sm font-medium text-gray-700">
+                        location {development.type}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-2xl font-extrabold ">${development.price.toLocaleString()}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {totalPages > 1 && (
+        <div className="flex gap-3 flex-wrap justify-center mt-12 mr-12">
+          {getPageNumbers().map((num) => (
+            <button
+              key={num}
+              onClick={() => setPage(num)}
+              className={`px-4 py-2 text-lg rounded-lg transition ${
+                page === num
+                  ? 'bg-blue-600 text-white font-bold'
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+              }`}
+            >
+              {num}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}

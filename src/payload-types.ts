@@ -73,6 +73,7 @@ export interface Config {
     users: User;
     redirects: Redirect;
     properties: Property;
+    developments: Development; 
     forms: Form;
     'form-submissions': FormSubmission;
     search: Search;
@@ -208,6 +209,16 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 
+
+export interface Post {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  availableUnits: Property[];
+}
+
 export interface Property {
   description: string;
   google_maps_location: string;
@@ -228,6 +239,41 @@ export interface Property {
   createdAt: string;
   updatedAt: string;
   _status?: 'draft' | 'published' | null;
+}
+
+export interface Development {
+  id: string;
+  title: string;
+  price: number;
+  description: string;
+  location: string; // was google_maps_location before
+  developer: string;
+  status: string;
+  type: string;
+
+  images: {
+    id: string;
+    image: {
+      url: string;
+    };
+    alt?: string;
+  }[];
+
+  // Relationship to Properties collection
+  units: {
+    id: string;
+  }[];
+
+  communalAmenities: {
+    amenity: string;
+  }[];
+
+  availableUnits: {
+    id: string;
+    title: string;
+    slug: string;
+    // add any other Property fields you need
+  }[];
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
