@@ -52,7 +52,6 @@ export default async function Post({ params: paramsPromise }: Args) {
         <div className="md:col-span-2 flex flex-col gap-6">
           {/* Property Image */}
           <ImageCarousel images={post.images.map((imageObj) => imageObj.image)} />
-
           {/* Property Title */}
           <h1 className="text-3xl font-bold text-gray-900">{post.title}</h1>
           {/* Property Price */}
@@ -63,7 +62,7 @@ export default async function Post({ params: paramsPromise }: Args) {
               🏷️ <span>{post.status}</span>
             </div>
           </div>
-          {/* Property Description */}
+          {/* Test push */}
           <div className="mt-8">
             <h2 className="text-2xl font-semibold mb-4">Property Description</h2>
             <p className="text-gray-700 leading-relaxed">
@@ -71,7 +70,6 @@ export default async function Post({ params: paramsPromise }: Args) {
                 'Wongamat Beach House For Sale (200m walk to beach) This property is an amazing investment opportunity with VERY HIGH RENTAL yield. Brand new house. Seaview wongamat beach & koh larn. 200 meter walking to beach. This is an perfect airbnb and daily rental unit. Freehold property. Property information: * 200sqm living area * 3 bedroom * 4 bathroom * 1 Big rooftop lounge terrace with Seaview to koh larn   * 2 balconys * open space livingroom, dining and kitchen first floor. * Laundry room * Freehold Property, Chanote. * No common fee. Highlights: * Brand New Development ‼️ * 200 meter walk to wongamat beach * Seaview * Private rooftop terrace * Top Location * Airbnb and daily rental friendly ✅ * All furniture included ✅ Nearby Attractions & Future Developments: * 100 meter to wongamat night market, Tops Supermarket & 7eleven. * 100 meter to Surf & Turf Beach Club, Colonial Bar & Restaurant * 500 meter walking to the glass house * Central Festival new beach shopping mall is coming only 300 meter away. * Sourrounded by high end restaurangs and beach clubs * 2km to terminal 21 shopping mall'}
             </p>
           </div>
-
           <h3 className="text-2xl font-semibold text-gray-900 mt-8">Available Units</h3>
           {post.availableUnits.length > 0 ? (
             <AvailableUnitsBlock properties={properties} />
