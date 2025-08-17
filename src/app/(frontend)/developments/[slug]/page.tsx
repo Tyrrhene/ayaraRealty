@@ -4,28 +4,33 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
+import { notFound } from 'next/navigation'
 
-import type { Post } from '@/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
 import ImageCarousel from '@/components/ImageCarousel'
-import { Posts } from '@/collections/Posts'
 import { AvailableUnitsBlock } from '@/blocks/AvailableUnitsBlock/Component'
+
 type Args = {
   params: Promise<{
     slug?: string
   }>
 }
 
-export default async function Post({ params: paramsPromise }: Args) {
+export default async function DevelopmentPage({ params: paramsPromise }: Args) {
   const payload = await getPayload({ config: configPromise })
 
   const { slug = '' } = await paramsPromise
-  const url = '/developments/' + slug
-  const post = await queryPostBySlug({ slug })
-  console.log('✅ Post fetched units', post.units)
-  console.log(post)
+  const development = await queryDevelopmentBySlug({ slug })
+
+  if (!development) {
+    notFound()
+  }
+
+  console.log('✅ Development fetched units', development?.units)
+  console.log(development)
+
   // Ensure each property has all required fields for Property type
-  const properties = post.availableUnits.map((unit: any) => ({
+  const properties = (development.availableUnits ?? []).map((unit: any) => ({
     id: unit.id,
     title: unit.title,
     slug: unit.slug,
@@ -51,36 +56,44 @@ export default async function Post({ params: paramsPromise }: Args) {
         {/* Left side: Property content */}
         <div className="md:col-span-2 flex flex-col gap-6">
           {/* Property Image */}
-          <ImageCarousel images={post.images.map((imageObj) => imageObj.image)} />
+          <ImageCarousel images={(development.images ?? []).map((imgObj: any) => imgObj.image)} />
+
           {/* Property Title */}
-          <h1 className="text-3xl font-bold text-gray-900">{post.title}</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{development.title}</h1>
+
           {/* Property Price */}
-          <div className="text-red-500 text-2xl font-semibold">฿ {post.price.toLocaleString()}</div>
+          {'price' in development && typeof development.price === 'number' ? (
+            <div className="text-red-500 text-2xl font-semibold">
+              ฿ {development.price.toLocaleString()}
+            </div>
+          ) : null}
+
           {/* Property Details */}
           <div className="flex flex-wrap gap-6 text-gray-700 text-sm border-t border-b py-4">
             <div className="flex items-center gap-2">
-              🏷️ <span>{post.status}</span>
+              🏷️ <span>{development.status}</span>
             </div>
           </div>
-          {/* Test push */}
+
+          {/* Description */}
           <div className="mt-8">
             <h2 className="text-2xl font-semibold mb-4">Property Description</h2>
             <p className="text-gray-700 leading-relaxed">
-              {post.description ||
+              {development.description ||
                 'Wongamat Beach House For Sale (200m walk to beach) This property is an amazing investment opportunity with VERY HIGH RENTAL yield. Brand new house. Seaview wongamat beach & koh larn. 200 meter walking to beach. This is an perfect airbnb and daily rental unit. Freehold property. Property information: * 200sqm living area * 3 bedroom * 4 bathroom * 1 Big rooftop lounge terrace with Seaview to koh larn   * 2 balconys * open space livingroom, dining and kitchen first floor. * Laundry room * Freehold Property, Chanote. * No common fee. Highlights: * Brand New Development ‼️ * 200 meter walk to wongamat beach * Seaview * Private rooftop terrace * Top Location * Airbnb and daily rental friendly ✅ * All furniture included ✅ Nearby Attractions & Future Developments: * 100 meter to wongamat night market, Tops Supermarket & 7eleven. * 100 meter to Surf & Turf Beach Club, Colonial Bar & Restaurant * 500 meter walking to the glass house * Central Festival new beach shopping mall is coming only 300 meter away. * Sourrounded by high end restaurangs and beach clubs * 2km to terminal 21 shopping mall'}
             </p>
           </div>
+
+          {/* Available Units */}
           <h3 className="text-2xl font-semibold text-gray-900 mt-8">Available Units</h3>
-          {post.availableUnits.length > 0 ? (
+          {(development.availableUnits?.length ?? 0) > 0 ? (
             <AvailableUnitsBlock properties={properties} />
           ) : (
             <p className="mt-8">No properties found or loading...</p>
           )}
         </div>
 
-        {/* Right side: Contact Form */}
-        {/* Right side: Contact Form */}
-        {/* Right side: Contact Form + Map */}
+        {/* Right side: Contact Form + Call Agent */}
         <div className="flex flex-col gap-4 h-fit">
           {/* Contact Form */}
           <div className="p-4 border rounded-lg shadow-md">
@@ -101,7 +114,7 @@ export default async function Post({ params: paramsPromise }: Args) {
                 placeholder="Message"
                 className="border rounded px-3 py-2 text-sm"
                 rows={3}
-                defaultValue={`Hi, I'm interested in ${post.title}`}
+                defaultValue={`Hi, I'm interested in ${development.title}`}
               />
               <button
                 type="submit"
@@ -133,19 +146,26 @@ export default async function Post({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
-  const post = await queryPostBySlug({ slug })
+  const development = await queryDevelopmentBySlug({ slug })
 
-  return generateMeta({ doc: post })
+  if (!development) {
+    return {
+      title: 'Development not found',
+      description: 'The requested development could not be located.',
+    }
+  }
+
+  return generateMeta({ doc: development })
 }
 
-const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryDevelopmentBySlug = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.findByID({
     collection: 'developments',
-    id: slug, // <-- id, not slug!
+    id: slug, // using id, not slug
     draft,
     overrideAccess: true,
   })
