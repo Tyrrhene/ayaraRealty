@@ -38,7 +38,7 @@ export default function PageClient() {
     <div className="px-10">
       {developments.length > 0 ? (
         <>
-          <h1 className="text-3xl font-bold mb-6">Developments</h1>
+          <h1 className="text-3xl font-bold mt-8 ml-10">Developments</h1>
           <DevelopmentBlock developments={developments} />
         </>
       ) : (
