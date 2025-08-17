@@ -216,8 +216,8 @@ export interface Post {
   description: string;
   createdAt: string;
   updatedAt: string;
-  availableUnits: Property[];
 }
+
 
 export interface Property {
   description: string;
@@ -268,12 +268,7 @@ export interface Development {
     amenity: string;
   }[];
 
-  availableUnits: {
-    id: string;
-    title: string;
-    slug: string;
-    // add any other Property fields you need
-  }[];
+  availableUnits: Property[];
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
