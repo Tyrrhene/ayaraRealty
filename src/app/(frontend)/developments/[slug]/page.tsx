@@ -89,7 +89,7 @@ export default async function DevelopmentPage({ params: paramsPromise }: Args) {
           {(development.availableUnits?.length ?? 0) > 0 ? (
             <AvailableUnitsBlock properties={properties} />
           ) : (
-            <p className="mt-8">No properties found or loading...</p>
+            <p className="mt-8">No Developments found or loading...</p>
           )}
         </div>
 
