@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import type { Property } from '@/payload-types'
 import RichText from '@/components/RichText'
 import Link from 'next/link'
+import ImageCarouselCard from '@/components/ImageCarouselCard'
 
 const LIMIT = 6
 const DISPLAY_PAGE_RANGE = 5
@@ -54,11 +55,12 @@ export const PropertyLandingBlock: React.FC<{
               className="w-full rounded overflow-hidden shadow-lg hover:shadow-xl bg-white transition transform hover:-translate-y-1 flex flex-col"
             >
               <div className="relative aspect-[4/3] w-full">
-                <img
+                {/* <img
                   className="absolute inset-0 h-full w-full object-cover"
                   src={property.images?.[0]?.image?.url ?? '/placeholder.jpg'}
                   alt={property.title ?? 'Property image'}
-                />
+                /> */}
+                <ImageCarouselCard images={property.images.map((imageObj) => imageObj.image)} />
               </div>
 
               <div className="flex-1 px-6 py-4 flex flex-col justify-between border border-gray-200">
