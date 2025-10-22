@@ -54,7 +54,10 @@ const ImageCarouselCard: React.FC<Props> = ({
 
   // swipe support
   const startX = useRef<number | null>(null)
-  const onTouchStart = (e: React.TouchEvent) => (startX.current = e.touches[0].clientX)
+  const onTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches && e.touches[0]
+    if (touch) startX.current = touch.clientX
+  }
   const onTouchEnd = (e: React.TouchEvent) => {
     if (startX.current == null) return
     const touch = e.changedTouches && e.changedTouches[0]
