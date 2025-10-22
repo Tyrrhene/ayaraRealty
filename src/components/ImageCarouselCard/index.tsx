@@ -57,7 +57,9 @@ const ImageCarouselCard: React.FC<Props> = ({
   const onTouchStart = (e: React.TouchEvent) => (startX.current = e.touches[0].clientX)
   const onTouchEnd = (e: React.TouchEvent) => {
     if (startX.current == null) return
-    const dx = e.changedTouches[0].clientX - startX.current
+    const touch = e.changedTouches && e.changedTouches[0]
+    if (!touch) return
+    const dx = touch.clientX - startX.current
     if (dx > 30) go(-1)
     if (dx < -30) go(1)
     startX.current = null
