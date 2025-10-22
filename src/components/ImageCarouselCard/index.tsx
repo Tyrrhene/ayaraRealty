@@ -87,7 +87,7 @@ const ImageCarouselCard: React.FC<Props> = ({
       >
         <Image
           key={current}
-          src={sources[current]}
+          src={sources[current]!}
           alt={`Image ${current + 1} of ${sources.length}`}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
