@@ -99,7 +99,7 @@ const ImageCarouselCard: React.FC<Props> = ({
         {/* --- First image only (eager). Renders immediately. --- */}
         {!restReady && (
           <Image
-            src={sources[0]}
+            src={sources[0]!}
             alt="Image 1"
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
