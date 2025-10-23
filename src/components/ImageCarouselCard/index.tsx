@@ -39,7 +39,7 @@ const ImageCarouselCard: React.FC<Props> = ({
   const go = (dir: 1 | -1) =>
     hasMany && setCurrent((i) => (i + dir + sources.length) % sources.length)
 
-  // Preload next/prev images
+  // Preload next/prev
   useEffect(() => {
     if (!hasMany) return
     const next = new window.Image()
@@ -48,7 +48,7 @@ const ImageCarouselCard: React.FC<Props> = ({
     prev.src = sources[(current - 1 + sources.length) % sources.length]!
   }, [current, hasMany, sources])
 
-  // Keyboard navigation
+  // Keyboard nav
   const rootRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const el = rootRef.current
@@ -61,15 +61,15 @@ const ImageCarouselCard: React.FC<Props> = ({
     return () => el.removeEventListener('keydown', onKey)
   }, [sources.length])
 
-  // Swipe support
+  // Swipe
   const startX = useRef<number | null>(null)
   const onTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches && e.touches[0]
+    const touch = e.touches?.[0]
     if (touch) startX.current = touch.clientX
   }
   const onTouchEnd = (e: React.TouchEvent) => {
     if (startX.current == null) return
-    const touch = e.changedTouches && e.changedTouches[0]
+    const touch = e.changedTouches?.[0]
     if (!touch) return
     const dx = touch.clientX - startX.current
     if (dx > 30) go(-1)
@@ -87,14 +87,14 @@ const ImageCarouselCard: React.FC<Props> = ({
       className={`select-none ${className}`}
     >
       <div
-        className="relative w-full overflow-hidden rounded-lg"
+        className="relative w-full overflow-hidden rounded-lg bg-gray-100"
         style={{ aspectRatio }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {/* IMAGES (stacked, fade transition) */}
+        {/* Images (stacked, fade transition) */}
         <div className="relative w-full h-full">
           {sources.map((src, i) => (
             <Image
@@ -107,13 +107,17 @@ const ImageCarouselCard: React.FC<Props> = ({
                 i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
               }`}
               unoptimized={unoptimized}
+              // --- load the first image eagerly for instant display
               priority={i === 0}
-              style={{ pointerEvents: i === current ? 'auto' : 'none' }}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              style={{
+                pointerEvents: i === current ? 'auto' : 'none',
+              }}
             />
           ))}
         </div>
 
-        {/* BUTTONS (on top of images, always clickable) */}
+        {/* Buttons (always on top) */}
         {hasMany && (
           <>
             <button
@@ -127,8 +131,8 @@ const ImageCarouselCard: React.FC<Props> = ({
                          bg-white/80 hover:bg-white text-black
                          rounded-full w-11 h-11 sm:w-12 sm:h-12
                          flex items-center justify-center text-2xl font-bold
-                         transition-opacity duration-300
-                         z-20 ${hovered ? 'opacity-100' : 'opacity-0'}`}
+                         transition-opacity duration-300 z-20
+                         ${hovered ? 'opacity-100' : 'opacity-0'}`}
             >
               ‹
             </button>
@@ -144,8 +148,8 @@ const ImageCarouselCard: React.FC<Props> = ({
                          bg-white/80 hover:bg-white text-black
                          rounded-full w-11 h-11 sm:w-12 sm:h-12
                          flex items-center justify-center text-2xl font-bold
-                         transition-opacity duration-300
-                         z-20 ${hovered ? 'opacity-100' : 'opacity-0'}`}
+                         transition-opacity duration-300 z-20
+                         ${hovered ? 'opacity-100' : 'opacity-0'}`}
             >
               ›
             </button>
