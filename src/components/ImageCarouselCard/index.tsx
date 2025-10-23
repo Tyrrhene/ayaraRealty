@@ -15,7 +15,6 @@ type Props = {
 function getSrc(img: ImageLike): string | undefined {
   if (typeof img === 'string') return img
   if (!img) return undefined
-  // Handle nested structures like { image: { url } }
   // @ts-ignore
   if (img.url) return img.url
   // @ts-ignore
@@ -34,21 +33,22 @@ const ImageCarouselCard: React.FC<Props> = ({
   const sources = images.map(getSrc).filter(Boolean) as string[]
   const [current, setCurrent] = useState(0)
   const [hovered, setHovered] = useState(false)
+  const [restReady, setRestReady] = useState(false) // render the rest only after first loads
   const hasMany = sources.length > 1
 
   const go = (dir: 1 | -1) =>
-    hasMany && setCurrent((i) => (i + dir + sources.length) % sources.length)
+    hasMany && restReady && setCurrent((i) => (i + dir + sources.length) % sources.length)
 
-  // Preload next/prev
+  // after the first finishes loading, preload others (browser cache)
   useEffect(() => {
-    if (!hasMany) return
-    const next = new window.Image()
-    next.src = sources[(current + 1) % sources.length]!
-    const prev = new window.Image()
-    prev.src = sources[(current - 1 + sources.length) % sources.length]!
-  }, [current, hasMany, sources])
+    if (!restReady || sources.length < 2) return
+    sources.slice(1).forEach((src) => {
+      const img = new window.Image()
+      img.src = src
+    })
+  }, [restReady, sources])
 
-  // Keyboard navigation
+  // keyboard nav
   const rootRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const el = rootRef.current
@@ -59,19 +59,19 @@ const ImageCarouselCard: React.FC<Props> = ({
     }
     el.addEventListener('keydown', onKey)
     return () => el.removeEventListener('keydown', onKey)
-  }, [sources.length])
+  }, [hasMany, restReady, sources.length])
 
-  // Swipe support
+  // swipe
   const startX = useRef<number | null>(null)
   const onTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches?.[0]
-    if (touch) startX.current = touch.clientX
+    const t = e.touches?.[0]
+    if (t) startX.current = t.clientX
   }
   const onTouchEnd = (e: React.TouchEvent) => {
-    if (startX.current == null) return
-    const touch = e.changedTouches?.[0]
-    if (!touch) return
-    const dx = touch.clientX - startX.current
+    if (startX.current == null || !restReady) return
+    const t = e.changedTouches?.[0]
+    if (!t) return
+    const dx = t.clientX - startX.current
     if (dx > 30) go(-1)
     if (dx < -30) go(1)
     startX.current = null
@@ -84,7 +84,6 @@ const ImageCarouselCard: React.FC<Props> = ({
       ref={rootRef}
       tabIndex={0}
       aria-roledescription="carousel"
-      // We detect hover/focus on the whole wrapper for cards wrapped in <Link>
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setHovered(true)}
@@ -97,27 +96,43 @@ const ImageCarouselCard: React.FC<Props> = ({
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        {/* Images (stacked, fade transition) */}
-        <div className="relative w-full h-full">
-          {sources.map((src, i) => (
-            <Image
-              key={src}
-              src={src}
-              alt={`Image ${i + 1} of ${sources.length}`}
-              fill
-              sizes="(max-width: 768px) 100vw, 33vw"
-              className={`object-cover absolute inset-0 transition-opacity duration-500 ${
-                i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
-              }`}
-              unoptimized={unoptimized}
-              priority={i === 0}
-              loading={i === 0 ? 'eager' : 'lazy'}
-              style={{ pointerEvents: i === current ? 'auto' : 'none' }}
-            />
-          ))}
-        </div>
+        {/* --- First image only (eager). Renders immediately. --- */}
+        {!restReady && (
+          <Image
+            src={sources[0]}
+            alt="Image 1"
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover absolute inset-0"
+            unoptimized={unoptimized}
+            priority
+            loading="eager"
+            onLoadingComplete={() => setRestReady(true)}
+          />
+        )}
 
-        {/* Buttons (always on top, fade in/out) */}
+        {/* --- After first loads, render all stacked (fade, cached) --- */}
+        {restReady && (
+          <div className="relative w-full h-full">
+            {sources.map((src, i) => (
+              <Image
+                key={src}
+                src={src}
+                alt={`Image ${i + 1} of ${sources.length}`}
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className={`object-cover absolute inset-0 transition-opacity duration-500 ${
+                  i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                }`}
+                unoptimized={unoptimized}
+                loading="lazy"
+                style={{ pointerEvents: i === current ? 'auto' : 'none' }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Buttons (only when many; hide until rest is ready to avoid navigating to unloaded imgs) */}
         {hasMany && (
           <>
             <button
@@ -127,12 +142,14 @@ const ImageCarouselCard: React.FC<Props> = ({
                 e.preventDefault()
                 go(-1)
               }}
+              disabled={!restReady}
               className={`absolute left-2 top-1/2 -translate-y-1/2
                          bg-white/80 hover:bg-white text-black
                          rounded-full w-11 h-11 sm:w-12 sm:h-12
                          flex items-center justify-center text-2xl font-bold
                          transition-opacity duration-300 z-20
-                         ${hovered ? 'opacity-100' : 'opacity-0'}`}
+                         ${hovered && restReady ? 'opacity-100' : 'opacity-0'}
+                         ${!restReady ? 'cursor-not-allowed opacity-0' : ''}`}
             >
               ‹
             </button>
@@ -144,12 +161,14 @@ const ImageCarouselCard: React.FC<Props> = ({
                 e.preventDefault()
                 go(1)
               }}
+              disabled={!restReady}
               className={`absolute right-2 top-1/2 -translate-y-1/2
                          bg-white/80 hover:bg-white text-black
                          rounded-full w-11 h-11 sm:w-12 sm:h-12
                          flex items-center justify-center text-2xl font-bold
                          transition-opacity duration-300 z-20
-                         ${hovered ? 'opacity-100' : 'opacity-0'}`}
+                         ${hovered && restReady ? 'opacity-100' : 'opacity-0'}
+                         ${!restReady ? 'cursor-not-allowed opacity-0' : ''}`}
             >
               ›
             </button>
