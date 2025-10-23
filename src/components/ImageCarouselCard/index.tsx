@@ -15,7 +15,7 @@ type Props = {
 function getSrc(img: ImageLike): string | undefined {
   if (typeof img === 'string') return img
   if (!img) return undefined
-  // Handle nested shapes like { image: { url } }
+  // Handle nested structures like { image: { url } }
   // @ts-ignore
   if (img.url) return img.url
   // @ts-ignore
@@ -48,7 +48,7 @@ const ImageCarouselCard: React.FC<Props> = ({
     prev.src = sources[(current - 1 + sources.length) % sources.length]!
   }, [current, hasMany, sources])
 
-  // Keyboard nav
+  // Keyboard navigation
   const rootRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const el = rootRef.current
@@ -61,7 +61,7 @@ const ImageCarouselCard: React.FC<Props> = ({
     return () => el.removeEventListener('keydown', onKey)
   }, [sources.length])
 
-  // Swipe
+  // Swipe support
   const startX = useRef<number | null>(null)
   const onTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches?.[0]
@@ -84,6 +84,11 @@ const ImageCarouselCard: React.FC<Props> = ({
       ref={rootRef}
       tabIndex={0}
       aria-roledescription="carousel"
+      // We detect hover/focus on the whole wrapper for cards wrapped in <Link>
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
       className={`select-none ${className}`}
     >
       <div
@@ -91,8 +96,6 @@ const ImageCarouselCard: React.FC<Props> = ({
         style={{ aspectRatio }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
       >
         {/* Images (stacked, fade transition) */}
         <div className="relative w-full h-full">
@@ -107,17 +110,14 @@ const ImageCarouselCard: React.FC<Props> = ({
                 i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
               }`}
               unoptimized={unoptimized}
-              // --- load the first image eagerly for instant display
               priority={i === 0}
               loading={i === 0 ? 'eager' : 'lazy'}
-              style={{
-                pointerEvents: i === current ? 'auto' : 'none',
-              }}
+              style={{ pointerEvents: i === current ? 'auto' : 'none' }}
             />
           ))}
         </div>
 
-        {/* Buttons (always on top) */}
+        {/* Buttons (always on top, fade in/out) */}
         {hasMany && (
           <>
             <button
