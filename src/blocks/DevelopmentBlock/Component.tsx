@@ -89,7 +89,7 @@ export const DevelopmentBlock: React.FC<{
                       </p>
                     </div>
                   </div>
-                  <p className="text-2xl font-extrabold ">${development.price.toLocaleString()}</p>
+                  <p className="text-2xl font-extrabold ">฿{development.price.toLocaleString()}</p>
                 </div>
               </div>
             </Link>
